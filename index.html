@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>5% Reflection Coach</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f4; height: 100vh; }
+.view { position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: none; flex-direction: column; }
+.view.active { display: flex; }
+.center { align-items: center; justify-content: center; padding: 24px; }
+.box { width: 280px; text-align: center; }
+.icon { width: 64px; height: 64px; border-radius: 50%; background: #292524; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; }
+.t1 { font-weight: 300; color: #292524; letter-spacing: 0.1em; font-size: 14px; text-transform: uppercase; }
+.t2 { font-size: 12px; color: #78716c; margin-top: 4px; }
+.inp { width: 100%; border-radius: 8px; border: 1px solid #d6d3d1; padding: 12px; font-size: 14px; background: #fff; text-align: center; margin-top: 32px; }
+.err { font-size: 12px; color: #dc2626; margin-top: 8px; display: none; }
+.btn1 { width: 100%; padding: 12px; border-radius: 8px; background: #292524; color: #fff; font-size: 14px; border: none; cursor: pointer; margin-top: 16px; }
+.t3 { font-size: 12px; color: #a8a29e; margin-top: 24px; }
+.hdr { background: #292524; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; }
+.hdr-l { display: flex; align-items: center; gap: 10px; }
+.hdr-i { width: 32px; height: 32px; border-radius: 50%; background: #44403c; display: flex; align-items: center; justify-content: center; }
+.hdr-t { font-weight: 300; color: #f5f5f4; letter-spacing: 0.1em; font-size: 12px; text-transform: uppercase; }
+.rst { font-size: 12px; padding: 6px 12px; color: #a8a29e; background: none; border: none; cursor: pointer; }
+.msgs { flex: 1; overflow-y: auto; padding: 12px; }
+.msg { display: flex; margin-bottom: 12px; }
+.msg-u { justify-content: flex-end; }
+.msg-a { justify-content: flex-start; }
+.bub { max-width: 88%; padding: 10px 14px; font-size: 14px; line-height: 1.6; }
+.bub-u { background: #44403c; color: #f5f5f4; border-radius: 16px 16px 4px 16px; }
+.bub-a { background: #fff; color: #57534e; border-radius: 16px 16px 16px 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.bold { font-weight: 600; color: #292524; }
+.foot { background: #fff; border-top: 1px solid #e7e5e4; padding: 12px; }
+.irow { display: flex; gap: 8px; }
+.irow textarea { flex: 1; resize: none; border-radius: 8px; border: 1px solid #e7e5e4; padding: 8px 12px; font-size: 14px; background: #fafaf9; font-family: inherit; }
+.irow button { padding: 0 16px; border-radius: 8px; background: #292524; color: #fff; font-size: 14px; border: none; cursor: pointer; }
+.irow button:disabled { opacity: 0.4; }
+.hint { text-align: center; font-size: 12px; color: #a8a29e; margin-top: 8px; }
+.dots span { display: inline-block; width: 6px; height: 6px; background: #a8a29e; border-radius: 50%; margin: 0 2px; animation: pulse 1s infinite; }
+.dots span:nth-child(2) { animation-delay: 0.2s; }
+.dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+</style>
+</head>
+<body>
+
+<div id="v1" class="view center active">
+<div class="box">
+<div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d6d3d1" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg></div>
+<div class="t1">5% Reflection</div>
+<div class="t2">Inner Potential Coach</div>
+<input type="password" id="pw" class="inp" placeholder="パスワードを入力">
+<div id="er" class="err">パスワードが正しくありません</div>
+<button id="lb" class="btn1">ログイン</button>
+<div class="t3">有効期限: 2026年1月22日まで</div>
+</div>
+</div>
+
+<div id="v2" class="view center">
+<div class="box">
+<div class="icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d6d3d1" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+<div class="t1">利用期間終了</div>
+<div class="t2">有効期限: 2026年1月22日</div>
+</div>
+</div>
+
+<div id="v3" class="view">
+<div class="hdr">
+<div class="hdr-l">
+<div class="hdr-i"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d6d3d1" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg></div>
+<span class="hdr-t">5% Reflection</span>
+</div>
+<button id="rb" class="rst">リセット</button>
+</div>
+<div id="ms" class="msgs"></div>
+<div class="foot">
+<div class="irow">
+<textarea id="ti" rows="1" placeholder="思いを言葉にしてください..."></textarea>
+<button id="sb">送信</button>
+</div>
+<div class="hint">「サマリー」でまとめを生成</div>
+</div>
+</div>
+
+<script>
+var PW = "NOAH2026";
+var KEY = "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";
+var EXP = new Date("2026-01-22T23:59:59");
+var SYS = "あなたはエグゼクティブコーチです。5%リフレクションを通じてエゴを特定し、ポテンシャルを引き出してください。Rules:1.アドバイス禁止 2.一度に一つの問い 3.感情フォーカス 4.正論には「何かを守ろうとしていませんか？」 5.サマリーと言われたら以下形式で出力:━━━━━━━━━━ 📋 SUMMARY ━━━━━━━━━━【タイトル】【領域】【感情】【エゴ】【ポテンシャル】━━━━━━━━━━";
+var INIT = "今日は、あなたの内側にある大切な何かを探求させてください。\n\n**『仕事』『家族』『個人』の中で、最近もっとも心を占有している出来事は何ですか？**";
+
+var data = [];
+var busy = false;
+
+var v1 = document.getElementById("v1");
+var v2 = document.getElementById("v2");
+var v3 = document.getElementById("v3");
+var pw = document.getElementById("pw");
+var er = document.getElementById("er");
+var lb = document.getElementById("lb");
+var rb = document.getElementById("rb");
+var ms = document.getElementById("ms");
+var ti = document.getElementById("ti");
+var sb = document.getElementById("sb");
+
+function show(v) {
+  v1.className = "view center";
+  v2.className = "view center";
+  v3.className = "view";
+  v.className = v.className + " active";
+}
+
+function draw() {
+  var h = "";
+  for (var i = 0; i < data.length; i++) {
+    var m = data[i];
+    var u = m.role === "user";
+    var c = m.content;
+    if (!u) {
+      c = c.replace(/\*\*(.+?)\*\*/g, "<span class='bold'>$1</span>");
+      c = c.replace(/\n/g, "<br>");
+    }
+    h = h + "<div class='msg " + (u ? "msg-u" : "msg-a") + "'>";
+    h = h + "<div class='bub " + (u ? "bub-u" : "bub-a") + "'>" + c + "</div></div>";
+  }
+  if (busy) {
+    h = h + "<div class='msg msg-a'><div class='bub bub-a'><div class='dots'><span></span><span></span><span></span></div></div></div>";
+  }
+  ms.innerHTML = h;
+  ms.scrollTop = ms.scrollHeight;
+}
+
+function login() {
+  if (pw.value === PW) {
+    data = [{role: "assistant", content: INIT}];
+    show(v3);
+    draw();
+  } else {
+    er.style.display = "block";
+  }
+}
+
+function reset() {
+  data = [{role: "assistant", content: INIT}];
+  ti.value = "";
+  draw();
+}
+
+function send() {
+  var t = ti.value.trim();
+  if (!t || busy) return;
+  data.push({role: "user", content: t});
+  ti.value = "";
+  busy = true;
+  sb.disabled = true;
+  draw();
+
+  var body = {
+    model: "claude-opus-4-5-20251101",
+    max_tokens: 1000,
+    system: SYS,
+    messages: data
+  };
+
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": KEY,
+      "anthropic-version": "2023-06-01",
+      "anthropic-dangerous-direct-browser-access": "true"
+    },
+    body: JSON.stringify(body)
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    var txt = "エラーが発生しました。";
+    if (d && d.content && d.content[0]) {
+      txt = d.content[0].text;
+    }
+    data.push({role: "assistant", content: txt});
+    busy = false;
+    sb.disabled = false;
+    draw();
+  })
+  .catch(function() {
+    data.push({role: "assistant", content: "接続エラー"});
+    busy = false;
+    sb.disabled = false;
+    draw();
+  });
+}
+
+if (new Date() > EXP) {
+  show(v2);
+}
+
+lb.onclick = login;
+pw.onkeydown = function(e) { if (e.key === "Enter") login(); };
+rb.onclick = reset;
+sb.onclick = send;
+ti.onkeydown = function(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    send();
+  }
+};
+</script>
+</body>
+</html>
